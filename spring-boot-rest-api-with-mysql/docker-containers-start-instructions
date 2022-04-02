@@ -1,0 +1,16 @@
+docker build -t spring-boot-app .
+
+docker create network spring-network
+
+docker run -d --name mysqldb \
+ 	-e MYSQL_ROOT_PASSWORD=pwd1234 \
+	-e MYSQL_DATABASE=mysqldb \
+	-p 3306:3306 \
+	--net spring-network \
+	mysql
+
+docker run -d --name spring-boot-app \
+    	-e MYSQL_ROOT_PASSWORD=pwd1234 \
+    	-e MYSQL_HOST=mysqldb -p 8080:8080 \
+    	--net spring-network \ 
+	spring-boot-app
